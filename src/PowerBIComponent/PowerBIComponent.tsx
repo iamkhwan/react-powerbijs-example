@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react"
+import { Container, Row, Col } from 'react-bootstrap';
 import PBIController from "../PowerBIController/PowerBIController";
 import PowerBIServices from "../PowerBIService/PowerBIService";
 
@@ -20,11 +21,21 @@ export default function PowerBIComponent({ reportURL }: PBIProps) {
             }
         };
 
+        //To set the MSAL Config in constructor
         new PowerBIServices();
+
+        //To render PBI report from report URL
         renderPBIReport();
+        
     }, [reportURL]);
 
     return (
-        <div ref={pbiContainerRef} style={{ height: 700, width: 1200 }}></div>
+        <Container>
+            <Row>
+                <Col>
+                    <div ref={pbiContainerRef} style={{ height: 600, width: "100%", paddingTop: 10, paddingBottom: 10 }}></div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
