@@ -69,10 +69,7 @@ export default class PowerBIController {
         return true;
     }
 
-    public static renderPowerBIReport(
-        reportContainer: HTMLDivElement,
-        reportURL: string
-    ): Promise<boolean> {
+    public static renderPowerBIReport(reportContainer: HTMLDivElement, reportURL: string): Promise<boolean> {
         let reportType =
             reportURL.indexOf("reportId") > 0 ? "report" : "dashboard";
         let pbiAccessToken = sessionStorage.getItem("pbiAccessToken");

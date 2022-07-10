@@ -12,6 +12,11 @@ export default function PowerBIComponent({ reportURL }: PBIProps) {
     const pbiContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        //To set the MSAL Config in constructor
+        new PowerBIServices();
+    }, []);
+
+    useEffect(() => {
         const renderPBIReport = async () => {
             let result = await PBIController.checkPBIAccessToken();
             if (result) {
@@ -21,12 +26,8 @@ export default function PowerBIComponent({ reportURL }: PBIProps) {
             }
         };
 
-        //To set the MSAL Config in constructor
-        new PowerBIServices();
-
         //To render PBI report from report URL
         renderPBIReport();
-        
     }, [reportURL]);
 
     return (

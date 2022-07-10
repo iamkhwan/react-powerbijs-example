@@ -1,6 +1,6 @@
 import {PublicClientApplication, Configuration} from "@azure/msal-browser";
 
-export default class PowerBIApi {
+export default class PowerBIService {
     private static authority = `${process.env.REACT_APP_AZURE_ACTIVE_DIRECTORY_APP_AAD_INSTANCE}/${process.env.REACT_APP_AZURE_ACTIVE_DIRECTORY_APP_TENANT_ID}`;
     private static clientId = `${process.env.REACT_APP_AZURE_ACTIVE_DIRECTORY_APP_CLIENT_ID}`;
     private static redirectUri = `${process.env.REACT_APP_AZURE_ACTIVE_DIRECTORY_REDIRECT_URL}`;
@@ -18,11 +18,11 @@ export default class PowerBIApi {
     };
 
     constructor() {
-        PowerBIApi.msalConfig = {
+        PowerBIService.msalConfig = {
             auth: {
-                authority: PowerBIApi.authority,
-                clientId: PowerBIApi.clientId,
-                redirectUri: PowerBIApi.redirectUri,
+                authority: PowerBIService.authority,
+                clientId: PowerBIService.clientId,
+                redirectUri: PowerBIService.redirectUri,
             },
             cache: {
                 cacheLocation: "localStorage",
@@ -30,22 +30,22 @@ export default class PowerBIApi {
             },
         };
 
-        PowerBIApi.myMSALObj = new PublicClientApplication(
-            PowerBIApi.msalConfig
+        PowerBIService.myMSALObj = new PublicClientApplication(
+            PowerBIService.msalConfig
         );
-        PowerBIApi.updateAccountToRequestObj();
+        PowerBIService.updateAccountToRequestObj();
     }
 
     private static updateAccountToRequestObj() {
-        let allAcounts = PowerBIApi.myMSALObj.getAllAccounts();
+        let allAcounts = PowerBIService.myMSALObj.getAllAccounts();
         if (allAcounts && allAcounts.length > 0) {
-            PowerBIApi.tokenRequest.account = allAcounts[0];
+            PowerBIService.tokenRequest.account = allAcounts[0];
         }
     }
 
     public static requestPBIAccessToken(): Promise<any> {
-        return PowerBIApi.myMSALObj
-            .acquireTokenSilent(PowerBIApi.tokenRequest)
+        return PowerBIService.myMSALObj
+            .acquireTokenSilent(PowerBIService.tokenRequest)
             .then((result: any) => {
                 return result;
             })
@@ -53,10 +53,10 @@ export default class PowerBIApi {
                 console.log("silent token acquisition fails. acquiring token using popup");
                 console.log(error);
 
-                return PowerBIApi.myMSALObj
-                    .acquireTokenPopup(PowerBIApi.tokenRequest)
+                return PowerBIService.myMSALObj
+                    .acquireTokenPopup(PowerBIService.tokenRequest)
                     .then((tokenResponse) => {
-                        PowerBIApi.updateAccountToRequestObj();
+                        PowerBIService.updateAccountToRequestObj();
                         return tokenResponse;
                     })
                     .catch((error2) => {
